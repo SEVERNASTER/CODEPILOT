@@ -182,6 +182,12 @@ app.post('/api/login', async (req, res) => {
                 sameSite: 'none',
                 maxAge: 1000 * 60 * 60 * 24 // 1 día
             })
+            .cookie('refresh_token', session.refresh_token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 días por ejemplo
+            })
             .status(200).json({
                 message: 'Login existoso',
                 mensajeBienvenida: `Bienvenido ${dataUser.nombre}`,
@@ -296,7 +302,7 @@ app.get('/api/getNiveles', authMiddleware, async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        
+
         console.error(error);
         res.status(500).json({ message: error.message });
     }
